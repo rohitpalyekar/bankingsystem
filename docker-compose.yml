@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: banking_system_postgres_test
+    environment:
+      POSTGRES_DB: banking_system_test
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: banking_system_app_test
+    depends_on:
+      - postgres
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgresql://admin:admin123@postgres:5432/banking_system_test
+
+volumes:
+  postgres_data:
